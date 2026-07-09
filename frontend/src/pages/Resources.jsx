@@ -1,17 +1,21 @@
 export default function Resources() {
   return (
-    <div className="page narrow">
-      <header className="page-header">
-        <span className="pill">Resources</span>
-        <h1>Support & contacts</h1>
-        <p className="lead">
-          FEU Tech campus offices (public directory) and national helplines. Verify
-          details if you need immediate help.
-        </p>
-      </header>
+    <div className="page">
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill">Campus map &amp; support</span>
+          <h1>Support &amp; contacts</h1>
+          <p className="lead">
+            FEU Tech campus offices and national helplines. Verify details if you need
+            immediate help.
+          </p>
+        </header>
+      </div>
 
       <section className="panel">
-        <h2>FEU Institute of Technology</h2>
+        <h2 style={{ fontFamily: "var(--display)", fontSize: "1.7rem", color: "var(--forest)" }}>
+          FEU Institute of Technology
+        </h2>
         <p className="muted">
           Source:{" "}
           <a href="https://www.feutech.edu.ph/contact" target="_blank" rel="noreferrer">
@@ -46,41 +50,48 @@ export default function Resources() {
             </p>
           </div>
         </div>
-        <p className="muted">
-          Note: For formal gender-based harassment complaints, ask campus offices about
-          the proper committee/process for educational institutions under RA 11313 /
-          school policy. Contact details may change — confirm with official channels.
+        <p className="muted" style={{ marginTop: "1rem" }}>
+          For formal gender-based harassment complaints, ask campus offices about the
+          proper committee/process under RA 11313 / school policy.
         </p>
       </section>
 
-      <section className="panel panel-alt">
+      <section className="panel panel-alt" style={{ marginTop: "1.1rem" }}>
         <h2>National / emergency support</h2>
         <div className="resource-list">
-          <div>
-            <strong>Emergency</strong>
-            <p>911</p>
+          <div style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.12)" }}>
+            <strong style={{ color: "var(--cream)" }}>Emergency</strong>
+            <p style={{ color: "rgba(247,241,230,0.75)" }}>911</p>
           </div>
-          <div>
-            <strong>NCMH Crisis Hotline</strong>
-            <p>1553 (Luzon-wide landline) · 0917-899-8727 · 0908-639-2672</p>
+          <div style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.12)" }}>
+            <strong style={{ color: "var(--cream)" }}>NCMH Crisis Hotline</strong>
+            <p style={{ color: "rgba(247,241,230,0.75)" }}>
+              1553 (Luzon-wide landline) · 0917-899-8727 · 0908-639-2672
+            </p>
           </div>
-          <div>
-            <strong>PNP Women and Children Protection / Aling Pulis</strong>
-            <p>0919-777-7377 · published WCPC landlines via official channels</p>
+          <div style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.12)" }}>
+            <strong style={{ color: "var(--cream)" }}>
+              PNP Women and Children Protection / Aling Pulis
+            </strong>
+            <p style={{ color: "rgba(247,241,230,0.75)" }}>
+              0919-777-7377 · published WCPC landlines via official channels
+            </p>
           </div>
-          <div>
-            <strong>NBI Anti-VAWC Division</strong>
-            <p>(02) 8525-6028 (public listings)</p>
+          <div style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.12)" }}>
+            <strong style={{ color: "var(--cream)" }}>NBI Anti-VAWC Division</strong>
+            <p style={{ color: "rgba(247,241,230,0.75)" }}>(02) 8525-6028 (public listings)</p>
           </div>
-          <div>
-            <strong>Public Attorney’s Office</strong>
-            <p>(02) 8929-9436 (locals per PAO guidance)</p>
+          <div style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.12)" }}>
+            <strong style={{ color: "var(--cream)" }}>Public Attorney’s Office</strong>
+            <p style={{ color: "rgba(247,241,230,0.75)" }}>
+              (02) 8929-9436 (locals per PAO guidance)
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="panel prose">
-        <h2>Laws & reading</h2>
+      <section className="panel prose" style={{ marginTop: "1.1rem" }}>
+        <h2>Laws &amp; reading</h2>
         <ul className="nice-list">
           <li>
             <a

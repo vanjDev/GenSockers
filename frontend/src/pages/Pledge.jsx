@@ -47,53 +47,61 @@ export default function Pledge() {
 
   return (
     <div className="page">
-      <header className="page-header">
-        <span className="pill">Pledge wall</span>
-        <h1>Choose acceptance</h1>
-        <p className="lead">
-          Mag-commit sa mas inclusive campus — name, nickname, initials, or anonymous.
-        </p>
-      </header>
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill">Pledge wall</span>
+          <h1>Choose acceptance</h1>
+          <p className="lead">
+            Mag-commit sa mas inclusive FEU Tech campus — name, nickname, initials, or
+            anonymous.
+          </p>
+        </header>
+      </div>
 
-      <section className="panel">
-        <form className="form" onSubmit={onSubmit}>
-          <label>
-            Your pledge
-            <textarea
-              rows={3}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Display name (optional)
-            <input
-              value={display_name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Anonymous / nickname"
-            />
-          </label>
-          <button className="btn btn-primary" type="submit">
-            Post my pledge
-          </button>
-        </form>
-        {status && <p className="alert success">{status}</p>}
-        {error && <p className="alert error">{error}</p>}
-      </section>
+      <div className="kapwa-layout">
+        <section>
+          <h2 className="section-title" style={{ textAlign: "left" }}>
+            Community pledges
+          </h2>
+          {loading && <p className="muted">Loading…</p>}
+          <div className="pledge-grid">
+            {pledges.map((p) => (
+              <article key={p.id} className="pledge-card">
+                <p>“{p.message}”</p>
+                <footer>— {p.display_name}</footer>
+              </article>
+            ))}
+          </div>
+        </section>
 
-      <section className="section">
-        <h2 className="section-title">Wall</h2>
-        {loading && <p>Loading…</p>}
-        <div className="pledge-grid">
-          {pledges.map((p) => (
-            <article key={p.id} className="pledge-card">
-              <p>“{p.message}”</p>
-              <footer>— {p.display_name}</footer>
-            </article>
-          ))}
-        </div>
-      </section>
+        <aside className="share-panel">
+          <h2>Make your pledge</h2>
+          <form className="form" onSubmit={onSubmit}>
+            <label>
+              Your pledge
+              <textarea
+                rows={4}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Display name (optional)
+              <input
+                value={display_name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Anonymous / nickname"
+              />
+            </label>
+            <button className="btn btn-primary" type="submit">
+              Post my pledge
+            </button>
+          </form>
+          {status && <p className="alert success">{status}</p>}
+          {error && <p className="alert error">{error}</p>}
+        </aside>
+      </div>
     </div>
   );
 }

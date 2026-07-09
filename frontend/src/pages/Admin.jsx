@@ -25,7 +25,11 @@ export default function Admin() {
       setStories(list);
     } catch (e) {
       setError(e.message);
-      if (e.message.toLowerCase().includes("token") || e.message.includes("401")) {
+      if (
+        e.message.toLowerCase().includes("token") ||
+        e.message.toLowerCase().includes("unauthorized") ||
+        e.message.includes("401")
+      ) {
         localStorage.removeItem(TOKEN_KEY);
         setToken("");
       }
@@ -72,11 +76,13 @@ export default function Admin() {
   if (!token) {
     return (
       <div className="page narrow">
-        <header className="page-header">
-          <span className="pill">Admin</span>
-          <h1>Moderator login</h1>
-          <p className="lead">Review pending K.A.P.W.A. stories.</p>
-        </header>
+        <div className="page-hero-band">
+          <header className="page-header">
+            <span className="pill">Admin</span>
+            <h1>Moderator login</h1>
+            <p className="lead">Review pending K.A.P.W.A. stories.</p>
+          </header>
+        </div>
         <form className="panel form" onSubmit={login}>
           <label>
             Admin password
@@ -99,29 +105,43 @@ export default function Admin() {
 
   return (
     <div className="page">
-      <header className="page-header">
-        <span className="pill">Admin</span>
-        <h1>Moderation desk</h1>
-        <div className="btn-row">
-          <button type="button" className="btn btn-ghost" onClick={() => refresh()}>
-            Refresh
-          </button>
-          <button type="button" className="btn btn-soft" onClick={logout}>
-            Log out
-          </button>
-        </div>
-      </header>
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill">Admin desk</span>
+          <h1>Moderation</h1>
+          <div className="btn-row" style={{ justifyContent: "center" }}>
+            <button type="button" className="btn btn-ghost" onClick={() => refresh()}>
+              Refresh
+            </button>
+            <button type="button" className="btn btn-soft" onClick={logout}>
+              Log out
+            </button>
+          </div>
+        </header>
+      </div>
 
       {stats && (
-        <div className="stats-row">
-          <div className="stat"><strong>{stats.pending_stories}</strong><span>Pending</span></div>
-          <div className="stat"><strong>{stats.approved_stories}</strong><span>Approved</span></div>
-          <div className="stat"><strong>{stats.rejected_stories}</strong><span>Rejected</span></div>
-          <div className="stat"><strong>{stats.pledges}</strong><span>Pledges</span></div>
+        <div className="stats-row" style={{ justifyContent: "center" }}>
+          <div className="stat">
+            <strong>{stats.pending_stories}</strong>
+            <span>Pending</span>
+          </div>
+          <div className="stat">
+            <strong>{stats.approved_stories}</strong>
+            <span>Approved</span>
+          </div>
+          <div className="stat">
+            <strong>{stats.rejected_stories}</strong>
+            <span>Rejected</span>
+          </div>
+          <div className="stat">
+            <strong>{stats.pledges}</strong>
+            <span>Pledges</span>
+          </div>
         </div>
       )}
 
-      <div className="chip-row" style={{ marginBottom: "1rem" }}>
+      <div className="chip-row" style={{ marginBottom: "1rem", justifyContent: "center" }}>
         {["pending", "approved", "rejected", "all"].map((f) => (
           <button
             key={f}
@@ -134,7 +154,7 @@ export default function Admin() {
         ))}
       </div>
 
-      {loading && <p>Loading…</p>}
+      {loading && <p className="muted" style={{ textAlign: "center" }}>Loading…</p>}
       {error && <p className="alert error">{error}</p>}
 
       <div className="story-grid">
@@ -142,7 +162,7 @@ export default function Admin() {
           <article key={s.id} className="story-card">
             <div className="story-meta">
               <span className="chip active">{s.status}</span>
-              <span className="muted">{s.category}</span>
+              <span className="muted">#{s.category}</span>
               <span className="muted">{s.display_name}</span>
             </div>
             <p>{s.body}</p>

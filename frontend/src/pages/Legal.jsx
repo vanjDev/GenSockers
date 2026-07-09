@@ -2,15 +2,17 @@ import { Link } from "react-router-dom";
 
 export default function Legal() {
   return (
-    <div className="page narrow">
-      <header className="page-header">
-        <span className="pill">Legal rights</span>
-        <h1>Know your rights</h1>
-        <p className="lead">
-          Educational overview — not legal advice. When in doubt, ask a trusted office
-          or counsel.
-        </p>
-      </header>
+    <div className="page">
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill">Legal rights</span>
+          <h1>Know your rights</h1>
+          <p className="lead">
+            Educational overview for FEU Tech students — not legal advice. When in
+            doubt, ask a trusted office or counsel.
+          </p>
+        </header>
+      </div>
 
       <section className="panel prose">
         <h2>Safe Spaces Act (RA 11313) — “Bawal Bastos Law”</h2>
@@ -28,7 +30,7 @@ export default function Legal() {
         </p>
       </section>
 
-      <section className="panel panel-alt prose">
+      <section className="panel panel-alt prose" style={{ marginTop: "1.1rem" }}>
         <h2>Careful framing (important)</h2>
         <p>
           <strong>Not every offensive joke automatically becomes a criminal act.</strong>{" "}
@@ -45,9 +47,11 @@ export default function Legal() {
         </p>
       </section>
 
-      <section className="grid-2">
+      <section className="grid-2" style={{ marginTop: "1.1rem" }}>
         <div className="panel">
-          <h3>What this campaign asks of us</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.45rem" }}>
+            What this campaign asks of us
+          </h3>
           <ul className="check-list">
             <li>Don’t normalize identity-based insults as “biro lang”</li>
             <li>Support peers who experience harassment</li>
@@ -56,7 +60,9 @@ export default function Legal() {
           </ul>
         </div>
         <div className="panel">
-          <h3>Where to go next</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.45rem" }}>
+            Where to go next
+          </h3>
           <ul className="nice-list">
             <li>
               <Link to="/resources">FEU Tech + national resources</Link>
@@ -79,7 +85,7 @@ export default function Legal() {
         </div>
       </section>
 
-      <p className="muted disclaimer">
+      <p className="disclaimer">
         Disclaimer: This page is for student awareness only. It does not create an
         attorney-client relationship and may not cover every legal nuance. For
         complaints or emergencies, contact appropriate authorities and campus offices.

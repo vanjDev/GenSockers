@@ -1,13 +1,16 @@
 export default function About() {
   return (
-    <div className="page narrow">
-      <header className="page-header">
-        <span className="pill">About</span>
-        <h1>Project T.U.L.A.Y.</h1>
-        <p className="lead">
-          Transforming Understanding through Learning, Acceptance, and You
-        </p>
-      </header>
+    <div className="page">
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill">About the campaign</span>
+          <h1>Project T.U.L.A.Y.</h1>
+          <p className="lead">
+            Transforming Understanding through Learning, Acceptance, and You
+          </p>
+          <p className="hero-tag">Bridging Tolerance to Acceptance</p>
+        </header>
+      </div>
 
       <section className="prose panel">
         <h2>Campaign overview</h2>
@@ -25,28 +28,29 @@ export default function About() {
         </p>
       </section>
 
-      <section className="prose panel">
-        <h2>Core problem</h2>
-        <p>
-          Many students may not recognize that casual jokes, stereotypes, comments,
-          or dismissive behavior can become microaggressions. These are often
-          normalized — and marginalized students may feel unsafe, unheard, or
-          invalidated.
-        </p>
+      <section className="grid-2" style={{ marginTop: "1.1rem" }}>
+        <div className="panel prose">
+          <h2>Core problem</h2>
+          <p>
+            Many students may not recognize that casual jokes, stereotypes, comments,
+            or dismissive behavior can become microaggressions. These are often
+            normalized — and marginalized students may feel unsafe, unheard, or
+            invalidated.
+          </p>
+        </div>
+        <div className="panel panel-alt prose">
+          <h2>Core objective</h2>
+          <p>
+            Encourage students and youth to unlearn systemic prejudice, recognize
+            microaggressions, and promote genuine inclusion — starting from personal
+            awareness and everyday behavior.
+          </p>
+        </div>
       </section>
 
-      <section className="prose panel">
-        <h2>Core objective</h2>
-        <p>
-          Encourage students and youth to unlearn systemic prejudice, recognize
-          microaggressions, and promote genuine inclusion — starting from personal
-          awareness and everyday behavior.
-        </p>
-      </section>
-
-      <section className="grid-2">
+      <section className="grid-2" style={{ marginTop: "1.1rem" }}>
         <div className="panel">
-          <h3>Sub-objectives</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.5rem" }}>Sub-objectives</h3>
           <ol className="nice-list">
             <li>Raise awareness about microaggressions</li>
             <li>Differentiate tolerance from acceptance</li>
@@ -55,20 +59,20 @@ export default function About() {
             <li>Encourage action through interactive learning</li>
           </ol>
         </div>
-        <div className="panel panel-alt">
-          <h3>Target audience</h3>
+        <div className="panel">
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.5rem" }}>Target audience</h3>
           <ul className="check-list">
-            <li>Students & youth</li>
-            <li>Campus communities</li>
-            <li>Young people shaped by online culture & peer influence</li>
+            <li>Students &amp; youth</li>
+            <li>Campus communities at FEU Tech</li>
+            <li>Young people shaped by online culture &amp; peer influence</li>
           </ul>
         </div>
       </section>
 
-      <section className="grid-2">
+      <section className="grid-2" style={{ marginTop: "1.1rem" }}>
         <div className="panel">
           <span className="badge">Campaign 1</span>
-          <h3>K.A.P.W.A.</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.6rem" }}>K.A.P.W.A.</h3>
           <p>
             A digital wall for stories of microaggression, discrimination, and
             moments of being unheard — with moderation, reactions, and reflection
@@ -77,7 +81,7 @@ export default function About() {
         </div>
         <div className="panel">
           <span className="badge badge-alt">Campaign 2</span>
-          <h3>H.I.N.T.O.</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.6rem" }}>H.I.N.T.O.</h3>
           <p>
             Pause before harm continues. Awareness hub for education, better
             language, tolerance vs acceptance, and careful legal literacy.
@@ -85,9 +89,8 @@ export default function About() {
         </div>
       </section>
 
-      <section className="panel banner">
-        <h3>Final message</h3>
-        <p>
+      <section className="section banner">
+        <p style={{ margin: 0 }}>
           Project T.U.L.A.Y. is not just a website. It is a digital bridge toward a
           more inclusive campus culture — where everyone feels respected, heard, and
           accepted.

@@ -5,44 +5,52 @@ const cards = [
     title: "Microaggressions",
     body: "Everyday digs that chip away at belonging. Intent ≠ impact.",
     to: "/learn",
+    icon: "🔍",
   },
   {
     title: "Tolerance vs Acceptance",
     body: "Tolerance = allow to exist. Acceptance = respect, support, include.",
+    icon: "🤝",
   },
   {
     title: "Harmful “jokes”",
     body: "If the punchline is someone’s identity, rethink the joke.",
+    icon: "🛑",
   },
   {
     title: "Legal awareness",
     body: "Some harassment — especially gender-based — can have legal consequences.",
     to: "/legal",
+    icon: "⚖️",
   },
   {
     title: "Respectful communication",
     body: "Pause. Ask. Listen. Apologize when needed. Repair when possible.",
+    icon: "💬",
   },
   {
     title: "Take action",
     body: "Practice with scenarios, then make a public pledge.",
     to: "/quiz",
+    icon: "✊",
   },
 ];
 
 export default function Hinto() {
   return (
     <div className="page">
-      <header className="page-header">
-        <span className="pill pill-alt">H.I.N.T.O.</span>
-        <h1>Pause. Reflect. Learn.</h1>
-        <p className="lead">
-          The awareness hub — stop harmful patterns before they continue.
-        </p>
-      </header>
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill pill-alt">H.I.N.T.O. Programs</span>
+          <h1>Pause. Reflect. Learn.</h1>
+          <p className="lead">
+            The awareness hub — stop harmful patterns before they continue.
+          </p>
+        </header>
+      </div>
 
-      <section className="panel banner">
-        <p>
+      <section className="panel banner" style={{ marginBottom: "1.5rem" }}>
+        <p style={{ margin: 0 }}>
           <strong>H.I.N.T.O.</strong> is your cue to stop, check yourself, and choose
           better. Hindi para shame-an ang tao — para turuan ang culture.
         </p>
@@ -51,8 +59,11 @@ export default function Hinto() {
       <section className="card-grid">
         {cards.map((c) => (
           <article key={c.title} className="feature-card">
+            <span className="action-icon" style={{ color: "var(--forest)" }}>
+              {c.icon}
+            </span>
             <h3>{c.title}</h3>
-            <p>{c.body}</p>
+            <p className="muted">{c.body}</p>
             {c.to && (
               <Link to={c.to} className="text-link">
                 Open →
@@ -62,7 +73,7 @@ export default function Hinto() {
         ))}
       </section>
 
-      <section className="grid-2">
+      <section className="grid-2" style={{ marginTop: "1.5rem" }}>
         <div className="panel prose">
           <h2>Tolerance vs acceptance</h2>
           <p>
@@ -86,7 +97,7 @@ export default function Hinto() {
         </div>
       </section>
 
-      <div className="btn-row">
+      <div className="btn-row" style={{ marginTop: "1.5rem", justifyContent: "center" }}>
         <Link className="btn btn-primary" to="/legal">
           Know your rights
         </Link>

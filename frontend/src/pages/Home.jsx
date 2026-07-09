@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 
 const actions = [
-  { to: "/learn", label: "Learn", emoji: "🧠", desc: "Microaggressions 101" },
-  { to: "/kapwa", label: "Share", emoji: "💬", desc: "K.A.P.W.A. stories" },
-  { to: "/quiz", label: "Reflect", emoji: "🎮", desc: "Scenario quiz" },
-  { to: "/pledge", label: "Pledge", emoji: "✊", desc: "Choose acceptance" },
-  { to: "/legal", label: "Know Your Rights", emoji: "⚖️", desc: "Safe Spaces Act" },
+  { to: "/learn", label: "Learn", desc: "Workshops & Resources", icon: "📖" },
+  { to: "/kapwa", label: "Share", desc: "Student Voices", icon: "💬" },
+  { to: "/quiz", label: "Reflect", desc: "Scenario Quiz", icon: "🪞" },
+  { to: "/pledge", label: "Pledge Rights", desc: "Commit to Inclusion", icon: "✍️" },
 ];
 
 export default function Home() {
@@ -15,70 +14,69 @@ export default function Home() {
         <div className="hero-copy">
           <div className="pill-row">
             <span className="pill">FEU Tech</span>
-            <span className="pill pill-alt">Campus Campaign</span>
-            <span className="pill pill-soft">Youth-led · Inclusive</span>
+            <span className="pill pill-alt">Gender Equality</span>
+            <span className="pill pill-soft">LGBTQIA+ Inclusion</span>
           </div>
           <h1>
-            Project <span className="gradient-text">T.U.L.A.Y.</span>
+            Bridging Tolerance
+            <br />
+            <span className="underline">to Acceptance</span>
           </h1>
-          <p className="lead">
-            <strong>T</strong>ransforming <strong>U</strong>nderstanding through{" "}
-            <strong>L</strong>earning, <strong>A</strong>cceptance, and{" "}
-            <strong>Y</strong>ou
+          <p className="hero-sub">
+            Project TULAY — FEU Tech&apos;s Gender Equality &amp; LGBTQIA+ Inclusion
+            Campaign
           </p>
           <p className="hero-tag">
             “Hindi sapat ang tolerance. Dapat may acceptance.”
           </p>
           <p>
-            A student-centered digital campaign bridging simple tolerance and true
-            inclusion — unlearning prejudice, recognizing microaggressions, and
-            building safer campus spaces at FEU Institute of Technology.
+            A student-centered digital campaign that helps campus communities unlearn
+            prejudice, recognize microaggressions, and build safer spaces for women,
+            LGBTQIA+ students, and all marginalized peers.
           </p>
           <div className="btn-row">
-            <Link className="btn btn-primary" to="/hinto">
-              Start with H.I.N.T.O.
+            <Link className="btn btn-primary" to="/pledge">
+              Take the Pledge
             </Link>
-            <Link className="btn btn-ghost" to="/kapwa">
-              Read K.A.P.W.A. stories
+            <Link className="btn btn-ghost" to="/hinto">
+              Explore H.I.N.T.O.
             </Link>
           </div>
         </div>
-        <div className="hero-card stack-cards">
-          <div className="sticker">✨ Unlearn</div>
-          <div className="sticker sticker-2">💚 Accept</div>
-          <div className="sticker sticker-3">🌉 Bridge</div>
-          <div className="info-card">
-            <h3>Ano ang T.U.L.A.Y.?</h3>
-            <p>
-              Tulay = bridge. We bridge awareness and action: from jokes that “seem
-              small” to real impact, from “tolerate ka lang” to genuine respect.
-            </p>
-            <ul className="check-list">
-              <li>Recognize microaggressions</li>
-              <li>Differentiate tolerance vs acceptance</li>
-              <li>Share safely · Reflect · Pledge</li>
-            </ul>
+
+        <div className="hero-visual" aria-hidden="true">
+          <div className="hero-bridge" />
+          <div className="pin-badge" />
+          <div className="hero-people">
+            <div className="person p1"><div className="head" /><div className="body" /></div>
+            <div className="person p2"><div className="head" /><div className="body" /></div>
+            <div className="person p3"><div className="head" /><div className="body" /></div>
+            <div className="person p4"><div className="head" /><div className="body" /></div>
+            <div className="person p5"><div className="head" /><div className="body" /></div>
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <h2 className="section-title">Where do you want to go?</h2>
-        <div className="action-grid">
-          {actions.map((a) => (
-            <Link key={a.to} to={a.to} className="action-card">
-              <span className="action-emoji">{a.emoji}</span>
-              <strong>{a.label}</strong>
-              <span>{a.desc}</span>
-            </Link>
-          ))}
+      <section className="action-strip">
+        <div className="action-strip-inner">
+          <div className="action-grid">
+            {actions.map((a) => (
+              <Link key={a.to} to={a.to} className="action-card">
+                <span className="action-icon">{a.icon}</span>
+                <strong>{a.label}</strong>
+                <span>{a.desc}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="section two-col">
         <div className="panel">
           <span className="badge">K.A.P.W.A.</span>
-          <h3>Safe space for shared experiences</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.6rem", margin: "0.4rem 0" }}>
+            Safe space for shared experiences
+          </h3>
           <p>
             Mag-share o magbasa ng stories tungkol sa discrimination, exclusion, o
             microaggressions — anonymously or with a name. Moderated for safety.
@@ -88,11 +86,15 @@ export default function Home() {
           </Link>
         </div>
         <div className="panel panel-alt">
-          <span className="badge badge-alt">H.I.N.T.O.</span>
-          <h3>Pause, reflect, and learn</h3>
+          <span className="badge badge-alt" style={{ background: "rgba(212,175,55,0.2)", color: "#f5e6a8", borderColor: "rgba(212,175,55,0.35)" }}>
+            H.I.N.T.O.
+          </span>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.6rem", margin: "0.4rem 0" }}>
+            Pause, reflect, and learn
+          </h3>
           <p>
-            Stop harmful patterns before they continue. Explainers, examples, and
-            better alternatives — plus legal awareness done carefully.
+            Stop harmful patterns before they continue. Explainers, examples, better
+            alternatives — plus careful legal awareness.
           </p>
           <Link to="/hinto" className="text-link">
             Enter the hub →
@@ -101,7 +103,7 @@ export default function Home() {
       </section>
 
       <section className="section banner">
-        <p>
+        <p style={{ margin: 0 }}>
           Hindi ito para mang-call out lang. Para ito matuto, mag-unlearn, at maging
           mas aware sa epekto ng words and actions natin.
         </p>

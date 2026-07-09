@@ -11,6 +11,16 @@ const CATEGORIES = [
   { value: "other", label: "Other" },
 ];
 
+const ICONS = {
+  gender: "👤",
+  sexuality: "🏳️‍🌈",
+  appearance: "✨",
+  language: "📖",
+  culture: "🌏",
+  social_status: "🤝",
+  other: "💭",
+};
+
 export default function Kapwa() {
   const [stories, setStories] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -75,68 +85,24 @@ export default function Kapwa() {
 
   return (
     <div className="page">
-      <header className="page-header">
-        <span className="pill">K.A.P.W.A.</span>
-        <h1>Experience wall</h1>
-        <p className="lead">
-          May naranasan ka bang joke, comment, or treatment na parang maliit lang sa
-          iba pero mabigat para sa’yo? You may share it here.
-        </p>
-      </header>
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill">K.A.P.W.A.</span>
+          <h1>KAPWA Experience Wall</h1>
+          <p className="lead">
+            A safe space for sharing lived experiences and fostering understanding.
+            Your story matters.
+          </p>
+          <p className="muted" style={{ marginTop: "0.5rem" }}>
+            May naranasan ka bang joke, comment, or treatment na parang maliit lang sa
+            iba pero mabigat para sa&apos;yo?
+          </p>
+        </header>
+      </div>
 
-      <section className="panel">
-        <h2>Share a story</h2>
-        <p className="muted">
-          Moderated before public — para mas safe ang space. Optional name; Anonymous
-          is okay.
-        </p>
-        <form className="form" onSubmit={onSubmit}>
-          <label>
-            Your story
-            <textarea
-              required
-              minLength={10}
-              rows={5}
-              value={form.body}
-              onChange={(e) => setForm({ ...form, body: e.target.value })}
-              placeholder="Ikwento nang komportable ka… walang pressure magbigay ng identifying details."
-            />
-          </label>
-          <div className="form-row">
-            <label>
-              Display name (optional)
-              <input
-                value={form.display_name}
-                onChange={(e) => setForm({ ...form, display_name: e.target.value })}
-                placeholder="Anonymous / nickname / initials"
-              />
-            </label>
-            <label>
-              Category
-              <select
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <button className="btn btn-primary" type="submit" disabled={submitting}>
-            {submitting ? "Sending…" : "Submit for review"}
-          </button>
-        </form>
-        {success && <p className="alert success">{success}</p>}
-        {error && <p className="alert error">{error}</p>}
-      </section>
-
-      <section className="section">
-        <div className="section-head">
-          <h2>Stories</h2>
-          <div className="chip-row">
+      <div className="kapwa-layout">
+        <div>
+          <div className="chip-row" style={{ marginBottom: "1.1rem", justifyContent: "flex-start" }}>
             <button
               type="button"
               className={`chip ${filter === "all" ? "active" : ""}`}
@@ -151,41 +117,88 @@ export default function Kapwa() {
                 className={`chip ${filter === c.value ? "active" : ""}`}
                 onClick={() => setFilter(c.value)}
               >
-                {c.label}
+                #{c.label}
               </button>
+            ))}
+          </div>
+
+          {loading && <p className="muted">Loading stories…</p>}
+          {!loading && visible.length === 0 && (
+            <p className="muted">Wala pang approved stories sa filter na ito.</p>
+          )}
+
+          <div className="story-grid">
+            {visible.map((story) => (
+              <article key={story.id} className="story-card">
+                <div className="avatar-icon">{ICONS[story.category] || "💭"}</div>
+                <div className="story-meta">
+                  <span className="chip active">#{story.category.replace("_", " ")}</span>
+                  <span className="muted">— {story.display_name}</span>
+                </div>
+                <p>{story.body}</p>
+                {story.reflection_prompt && (
+                  <div className="reflection">
+                    <strong>Reflect:</strong> {story.reflection_prompt}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  className="btn btn-soft"
+                  onClick={() => onRelate(story.id)}
+                >
+                  ♥ I relate · {story.relate_count}
+                </button>
+              </article>
             ))}
           </div>
         </div>
 
-        {loading && <p>Loading stories…</p>}
-        {!loading && visible.length === 0 && (
-          <p className="muted">Wala pang approved stories sa filter na ito.</p>
-        )}
-
-        <div className="story-grid">
-          {visible.map((story) => (
-            <article key={story.id} className="story-card">
-              <div className="story-meta">
-                <span className="chip active">{story.category.replace("_", " ")}</span>
-                <span className="muted">{story.display_name}</span>
-              </div>
-              <p>{story.body}</p>
-              {story.reflection_prompt && (
-                <div className="reflection">
-                  <strong>Reflect:</strong> {story.reflection_prompt}
-                </div>
-              )}
-              <button
-                type="button"
-                className="btn btn-soft"
-                onClick={() => onRelate(story.id)}
+        <aside className="share-panel">
+          <h2>Share Your Story</h2>
+          <p className="muted" style={{ color: "rgba(247,241,230,0.7)", textAlign: "center", marginTop: 0 }}>
+            Moderated before public — para mas safe ang space.
+          </p>
+          <form className="form" onSubmit={onSubmit}>
+            <label>
+              Category
+              <select
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
               >
-                I relate · {story.relate_count}
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Your story
+              <textarea
+                required
+                minLength={10}
+                rows={5}
+                value={form.body}
+                onChange={(e) => setForm({ ...form, body: e.target.value })}
+                placeholder="Your story is safe here… (optional: stay anonymous)"
+              />
+            </label>
+            <label>
+              Display name (optional)
+              <input
+                value={form.display_name}
+                onChange={(e) => setForm({ ...form, display_name: e.target.value })}
+                placeholder="Anonymous / nickname / initials"
+              />
+            </label>
+            <button className="btn btn-primary" type="submit" disabled={submitting}>
+              {submitting ? "Sending…" : "Submit to the Wall"}
+            </button>
+          </form>
+          {success && <p className="alert success">{success}</p>}
+          {error && <p className="alert error">{error}</p>}
+        </aside>
+      </div>
     </div>
   );
 }

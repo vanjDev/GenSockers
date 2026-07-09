@@ -21,14 +21,16 @@ const examples = [
 
 export default function Learn() {
   return (
-    <div className="page narrow">
-      <header className="page-header">
-        <span className="pill">Learn</span>
-        <h1>Microaggressions, simply</h1>
-        <p className="lead">
-          Student-friendly guide — hindi lecture mode, promise.
-        </p>
-      </header>
+    <div className="page">
+      <div className="page-hero-band">
+        <header className="page-header">
+          <span className="pill">Learn</span>
+          <h1>Microaggressions, simply</h1>
+          <p className="lead">
+            Student-friendly guide for FEU Tech — educational, not lecture mode.
+          </p>
+        </header>
+      </div>
 
       <section className="panel prose">
         <h2>What is a microaggression?</h2>
@@ -40,7 +42,7 @@ export default function Learn() {
         </p>
       </section>
 
-      <section className="panel prose">
+      <section className="panel prose" style={{ marginTop: "1.1rem" }}>
         <h2>Why do “small jokes” still matter?</h2>
         <p>
           Because they teach who belongs and who doesn’t. Repeating stereotypes —
@@ -50,8 +52,10 @@ export default function Learn() {
         </p>
       </section>
 
-      <section className="panel">
-        <h2>Common campus examples</h2>
+      <section className="panel" style={{ marginTop: "1.1rem" }}>
+        <h2 style={{ fontFamily: "var(--display)", fontSize: "1.7rem", color: "var(--forest)" }}>
+          Common campus examples
+        </h2>
         <div className="compare-list">
           {examples.map((ex) => (
             <div key={ex.bad} className="compare-card">
@@ -68,9 +72,11 @@ export default function Learn() {
         </div>
       </section>
 
-      <section className="grid-2">
+      <section className="grid-2" style={{ marginTop: "1.1rem" }}>
         <div className="panel">
-          <h3>How to respond when you hear one</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.45rem" }}>
+            How to respond when you hear one
+          </h3>
           <ul className="nice-list">
             <li>Check safety first — for you and the person targeted</li>
             <li>Name the impact calmly: “Hindi biro yun for some of us.”</li>
@@ -79,7 +85,9 @@ export default function Learn() {
           </ul>
         </div>
         <div className="panel panel-alt">
-          <h3>What to say instead</h3>
+          <h3 style={{ fontFamily: "var(--display)", fontSize: "1.45rem" }}>
+            What to say instead
+          </h3>
           <ul className="check-list">
             <li>“Can we not joke about people’s identities?”</li>
             <li>“That stereotype isn’t true / isn’t funny.”</li>
@@ -89,7 +97,7 @@ export default function Learn() {
         </div>
       </section>
 
-      <div className="btn-row">
+      <div className="btn-row" style={{ marginTop: "1.5rem", justifyContent: "center" }}>
         <Link className="btn btn-primary" to="/hinto">
           Go deeper in H.I.N.T.O.
         </Link>
