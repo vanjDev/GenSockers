@@ -4,8 +4,12 @@ Project T.U.L.A.Y. — single-command runner.
 
 Usage:
     python main.py
-    python main.py --build      # force rebuild frontend first
+    python main.py --build      # force rebuild frontend
+    python main.py --no-build   # skip rebuild even if source changed
     python main.py --port 5123  # default is 5123
+
+By default, main.py rebuilds the React app when frontend source is newer
+than frontend/dist (so restart picks up UI changes).
 
 Then open: http://127.0.0.1:5123
 """
@@ -25,6 +29,17 @@ FRONTEND = ROOT / "frontend"
 DIST = FRONTEND / "dist"
 DEFAULT_PORT = 5123
 
+# Watched paths — if any are newer than dist/index.html, rebuild
+SOURCE_GLOBS = (
+    "src/**/*",
+    "public/**/*",
+    "index.html",
+    "package.json",
+    "package-lock.json",
+    "vite.config.js",
+    "vite.config.ts",
+)
+
 
 def _which(cmd: str) -> str | None:
     return shutil.which(cmd)
@@ -35,16 +50,49 @@ def _run(cmd: list[str], cwd: Path) -> None:
     subprocess.run(cmd, cwd=str(cwd), check=True)
 
 
-def ensure_frontend(force_build: bool = False) -> None:
-    index = DIST / "index.html"
-    if index.is_file() and not force_build:
-        print(f"Using existing frontend build: {DIST}")
-        return
+def _latest_mtime(paths: list[Path]) -> float:
+    latest = 0.0
+    for path in paths:
+        try:
+            if path.is_file():
+                latest = max(latest, path.stat().st_mtime)
+        except OSError:
+            continue
+    return latest
 
+
+def _collect_source_files() -> list[Path]:
+    files: list[Path] = []
+    for pattern in SOURCE_GLOBS:
+        files.extend(p for p in FRONTEND.glob(pattern) if p.is_file())
+    # de-dupe
+    return list({p.resolve() for p in files})
+
+
+def frontend_needs_rebuild() -> tuple[bool, str]:
+    index = DIST / "index.html"
+    if not index.is_file():
+        return True, "frontend/dist is missing"
+
+    dist_mtime = index.stat().st_mtime
+    sources = _collect_source_files()
+    if not sources:
+        return False, "no frontend sources found (using existing dist)"
+
+    src_mtime = _latest_mtime(sources)
+    if src_mtime > dist_mtime + 0.5:  # small tolerance for FS precision
+        return True, "frontend source is newer than dist"
+
+    return False, "dist is up to date"
+
+
+def build_frontend() -> None:
     npm = _which("npm")
+    index = DIST / "index.html"
+
     if not npm:
         if index.is_file():
-            print("npm not found; using existing frontend/dist")
+            print("WARNING: npm not found; cannot rebuild. Using existing frontend/dist")
             return
         print(
             "ERROR: frontend/dist is missing and npm is not installed.\n"
@@ -64,9 +112,31 @@ def ensure_frontend(force_build: bool = False) -> None:
     print("Frontend build ready.")
 
 
-def ensure_python_deps() -> None:
-    """Best-effort: use backend venv uvicorn if present."""
-    pass
+def ensure_frontend(*, force_build: bool = False, skip_build: bool = False) -> None:
+    index = DIST / "index.html"
+
+    if skip_build:
+        if not index.is_file():
+            print(
+                "ERROR: --no-build used but frontend/dist is missing.\n"
+                "Run once without --no-build (or with --build).",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        print(f"Skipping frontend build (--no-build). Using {DIST}")
+        return
+
+    if force_build:
+        print("Force rebuild requested (--build).")
+        build_frontend()
+        return
+
+    needs, reason = frontend_needs_rebuild()
+    if needs:
+        print(f"Frontend rebuild needed: {reason}")
+        build_frontend()
+    else:
+        print(f"Using existing frontend build ({reason}): {DIST}")
 
 
 def main() -> None:
@@ -88,13 +158,22 @@ def main() -> None:
         help="Force rebuild the React frontend before starting",
     )
     parser.add_argument(
+        "--no-build",
+        action="store_true",
+        help="Skip frontend rebuild even if source files changed",
+    )
+    parser.add_argument(
         "--reload",
         action="store_true",
         help="Enable auto-reload (dev; API only, not frontend)",
     )
     args = parser.parse_args()
 
-    ensure_frontend(force_build=args.build)
+    if args.build and args.no_build:
+        print("ERROR: use only one of --build or --no-build", file=sys.stderr)
+        sys.exit(1)
+
+    ensure_frontend(force_build=args.build, skip_build=args.no_build)
 
     # Import app from backend package
     sys.path.insert(0, str(BACKEND))
@@ -113,7 +192,6 @@ def main() -> None:
     # Prefer backend venv packages if we're on system python without deps
     venv_site = BACKEND / ".venv"
     if venv_site.is_dir():
-        # Re-exec with venv python if current interpreter lacks app deps
         try:
             import fastapi  # noqa: F401
         except ImportError:

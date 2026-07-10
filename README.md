@@ -42,13 +42,16 @@ Open: **http://127.0.0.1:5123**
 ### Useful flags
 
 ```bash
-python main.py              # port 5123
-python main.py --build      # rebuild React UI, then start
+python main.py              # port 5123; auto-rebuilds UI if source changed
+python main.py --build      # force rebuild React UI, then start
+python main.py --no-build   # skip rebuild (faster; uses existing dist)
 python main.py --port 5123  # explicit port
 python main.py --reload     # API auto-reload while developing
 ```
 
-If `frontend/dist` is missing, `main.py` will run `npm run build` automatically.
+**Why rebuild?** Python serves the production build in `frontend/dist`, not live React source.
+`main.py` compares timestamps of `frontend/src`, `public`, etc. vs `dist` and runs
+`npm run build` when the UI is out of date — so restarting after frontend edits updates the site.
 
 ### Admin
 
