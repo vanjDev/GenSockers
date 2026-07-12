@@ -91,6 +91,49 @@ def frontend_needs_rebuild() -> tuple[bool, str]:
     return False, "dist is up to date"
 
 
+def frontend_needs_npm_install() -> bool:
+    """True when node_modules is missing or package lock is newer than install."""
+    node_modules = FRONTEND / "node_modules"
+    if not node_modules.is_dir():
+        return True
+
+    # After git pull, package.json / lock update but node_modules does not.
+    try:
+        nm_mtime = node_modules.stat().st_mtime
+    except OSError:
+        return True
+
+    for name in ("package-lock.json", "package.json"):
+        path = FRONTEND / name
+        try:
+            if path.is_file() and path.stat().st_mtime > nm_mtime + 0.5:
+                return True
+        except OSError:
+            continue
+
+    # Explicit check: lucide (or any listed dep) missing after partial install.
+    package_json = FRONTEND / "package.json"
+    if package_json.is_file():
+        try:
+            import json
+
+            data = json.loads(package_json.read_text(encoding="utf-8"))
+            deps = {**(data.get("dependencies") or {}), **(data.get("devDependencies") or {})}
+            for dep in deps:
+                # Scoped packages live under @scope/name
+                if dep.startswith("@"):
+                    parts = dep.split("/", 1)
+                    candidate = node_modules / parts[0] / parts[1]
+                else:
+                    candidate = node_modules / dep
+                if not candidate.exists():
+                    return True
+        except (OSError, ValueError, TypeError):
+            return True
+
+    return False
+
+
 def build_frontend() -> None:
     npm = _which("npm")
     index = DIST / "index.html"
@@ -107,7 +150,8 @@ def build_frontend() -> None:
         sys.exit(1)
 
     print("Building React frontend...")
-    if not (FRONTEND / "node_modules").is_dir():
+    if frontend_needs_npm_install():
+        print("Installing frontend dependencies (package.json/lock updated or deps missing)...")
         _run([npm, "install"], FRONTEND)
     _run([npm, "run", "build"], FRONTEND)
 
