@@ -32,7 +32,7 @@ export default function Learn() {
           </p>
         </header>
         <img
-          src="/art/hinto-hub.jpg"
+          src="/art/v2/learn.png"
           alt="Learning and reflection illustration for microaggression awareness"
           className="page-hero-art"
         />

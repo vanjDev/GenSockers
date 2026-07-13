@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { campaign } from "../campaign";
+import TulayLogo from "./TulayLogo";
 
 export default function Footer() {
   return (
@@ -22,7 +23,7 @@ export default function Footer() {
 
       <div className="footer-grid">
         <div>
-          <h3>{campaign.name}</h3>
+          <TulayLogo theme="dark" />
           <p>
             Student-led campus campaign for LGBTQIA+ inclusion and belonging.
           </p>

@@ -13,7 +13,7 @@ export default function Legal() {
           </p>
         </header>
         <img
-          src="/art/legal-scales.jpg"
+          src="/art/v2/legal.png"
           alt="Golden scales of justice with inclusive ribbon accents"
           className="page-hero-art page-hero-art-square"
         />

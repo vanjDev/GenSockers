@@ -135,7 +135,7 @@ export default function Quiz() {
           </p>
         </header>
         <img
-          src="/art/quiz-classroom.jpg"
+          src="/art/v2/quiz.png"
           alt="Diverse students collaborating respectfully"
           className="page-hero-art"
         />
@@ -206,7 +206,7 @@ export default function Quiz() {
 
         <aside className="quiz-art quiz-art-img">
           <img
-            src="/art/quiz-classroom.jpg"
+            src="/art/v2/quiz.png"
             alt=""
             className="page-art"
             aria-hidden="true"

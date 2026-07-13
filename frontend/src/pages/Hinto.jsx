@@ -48,7 +48,7 @@ export default function Hinto() {
           </p>
         </header>
         <img
-          src="/art/hinto-hub.jpg"
+          src="/art/v2/hinto.png"
           alt="Illustration of pause, learning, and a bridge toward awareness"
           className="page-hero-art"
         />

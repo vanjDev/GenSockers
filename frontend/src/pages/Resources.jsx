@@ -11,7 +11,7 @@ export default function Resources() {
           </p>
         </header>
         <img
-          src="/art/resources-support.jpg"
+          src="/art/v2/resources.png"
           alt="Warm campus doorway symbolizing guidance and student support"
           className="page-hero-art"
         />

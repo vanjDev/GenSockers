@@ -15,11 +15,6 @@ export default function Layout() {
 
   return (
     <div className="app-shell">
-      <div className="bg-blobs" aria-hidden="true">
-        <span className="blob blob-a" />
-        <span className="blob blob-b" />
-        <span className="blob blob-c" />
-      </div>
       <Navbar />
       <ScrollProgress />
       <main id="main-content" className="main" tabIndex={-1}>

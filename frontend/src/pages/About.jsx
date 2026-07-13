@@ -12,7 +12,7 @@ export default function About() {
           <p className="hero-tag">{campaign.tagline}</p>
         </header>
         <img
-          src="/art/hero-bridge.jpg"
+          src="/art/v2/hero-bridge.png"
           alt="Students united under a bridge representing Project TULAY"
           className="page-hero-art"
         />

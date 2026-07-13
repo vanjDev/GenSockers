@@ -76,7 +76,7 @@ export default function Bridge() {
           </div>
         </header>
         <img
-          src="/art/hero-bridge.jpg"
+          src="/art/v2/hero-bridge.png"
           alt="Bridge symbolizing connection across campus differences"
           className="page-hero-art"
         />

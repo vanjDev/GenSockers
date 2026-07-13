@@ -13,6 +13,7 @@ import {
   getParticipantAuthEventName,
   loadParticipantSession,
 } from "../auth";
+import TulayLogo from "./TulayLogo";
 
 const primary = [
   { to: "/about", label: "About" },
@@ -99,30 +100,7 @@ export default function Navbar() {
       </a>
       <div className="nav-inner">
         <NavLink to="/" className="brand" onClick={() => setOpen(false)}>
-          <span className="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M4 22C8 12 12 8 16 8C20 8 24 12 28 22"
-                stroke="#0D3B2E"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-              />
-              <path
-                d="M8 22C11 16 13.5 13 16 13C18.5 13 21 16 24 22"
-                stroke="#0D3B2E"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                opacity="0.55"
-              />
-              <circle cx="16" cy="20" r="2.2" fill="#0D3B2E" />
-            </svg>
-          </span>
-          <span className="brand-text">
-            <strong>
-              Project <span>TULAY</span>
-            </strong>
-            <small>Bridge to Belonging</small>
-          </span>
+          <TulayLogo />
         </NavLink>
 
         <button

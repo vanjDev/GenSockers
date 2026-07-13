@@ -98,7 +98,7 @@ export default function Kapwa() {
           </p>
         </header>
         <img
-          src="/art/kapwa-stories.jpg"
+          src="/art/v2/stories.png"
           alt="Illustrated community story wall representing shared student experiences"
           className="page-hero-art"
         />

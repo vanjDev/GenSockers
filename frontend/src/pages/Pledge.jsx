@@ -57,7 +57,7 @@ export default function Pledge() {
           </p>
         </header>
         <img
-          src="/art/pledge-hands.jpg"
+          src="/art/v2/pledge-hands.png"
           alt="Open hands releasing a heart of inclusion and pride colors"
           className="page-hero-art"
         />
