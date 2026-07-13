@@ -3,123 +3,89 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, HeartHandshake, RotateCcw } from "lucide-react";
 import { api } from "../api";
 
-const KEYS = ["a", "b", "c", "d"];
-const OPTION_TONES = {
-  a: "forest",
-  b: "gold",
-  c: "lilac",
-  d: "sand",
-};
-const SCENARIO_ART = [
-  {
-    src: "/art/v2/quiz-scenarios/scenario-01.webp",
-    alt: "A concerned classmate checks on a student who looks uncomfortable while others laugh nearby",
-  },
-  {
-    src: "/art/v2/quiz-scenarios/scenario-02.webp",
-    alt: "Students react to a group chat while one classmate calmly signals that a harmful post is not okay",
-  },
-  {
-    src: "/art/v2/quiz-scenarios/scenario-03.webp",
-    alt: "A classmate steps in as another student leans away from unwanted touching",
-  },
-  {
-    src: "/art/v2/quiz-scenarios/scenario-04.webp",
-    alt: "Friends discuss equal respect while a same-gender couple sits comfortably together on campus",
-  },
-  {
-    src: "/art/v2/quiz-scenarios/scenario-05.webp",
-    alt: "A student supports a targeted classmate and points toward a trusted campus staff member",
-  },
-  {
-    src: "/art/v2/quiz-scenarios/scenario-06.webp",
-    alt: "A classmate redirects attention toward a student presenting while others react dismissively",
-  },
-];
-
-function scrollQuizIntoView() {
-  if (typeof window === "undefined") return;
-  const shell = document.querySelector(".choice-quiz-shell");
-  if (!shell) return;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const top = shell.getBoundingClientRect().top + window.scrollY - 88;
-  window.scrollTo({ top: Math.max(0, top), behavior: reducedMotion ? "auto" : "smooth" });
-}
+const CHOICES = ["q1", "q2", "q3", "q4"];
 
 export default function Quiz() {
-  const [scenarios, setScenarios] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [index, setIndex] = useState(0);
-  const [feedback, setFeedback] = useState(null);
-  const [score, setScore] = useState(0);
-  const [answered, setAnswered] = useState(0);
+  const [stage, setStage] = useState("ready");
+  const [selectedChoice, setSelectedChoice] = useState(null);
+  const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     api
-      .getQuiz()
-      .then(setScenarios)
+      .getQuizV2()
+      .then(setQuestions)
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
 
-  const current = scenarios[index];
-  const currentArt = SCENARIO_ART[index] ?? SCENARIO_ART[0];
-  const progress = scenarios.length
-    ? Math.round(((index + (feedback ? 1 : 0)) / scenarios.length) * 100)
+  const current = questions[index];
+  const progress = questions.length
+    ? Math.round(((index + (stage === "result" ? 1 : 0)) / questions.length) * 100)
+    : 0;
+  const questionImage = current ? `/quiz/v2/questions/${current.id}/question.png` : "";
+  const responseImage = current ? `/quiz/v2/questions/${current.id}/response.png` : "";
+
+  const responseData = response?.data || { q1: 0, q2: 0, q3: 0, q4: 0 };
+  const totalResponses = Object.values(responseData).reduce((sum, value) => sum + value, 0);
+  const selectedCount = selectedChoice ? responseData[selectedChoice] : 0;
+  const samePercent = totalResponses
+    ? Math.round((selectedCount / totalResponses) * 100)
     : 0;
 
-  useEffect(() => {
-    const nextArt = SCENARIO_ART[index + 1];
-    if (!nextArt || typeof Image === "undefined") return undefined;
-    const image = new Image();
-    image.src = nextArt.src;
-    return undefined;
-  }, [index]);
+  function resetCurrent() {
+    setSelectedChoice(null);
+    setResponse(null);
+    setStage("ready");
+    setBusy(false);
+  }
 
-  async function choose(selected) {
-    if (!current || feedback || submitting) return;
-    setSubmitting(true);
+  async function loadChoice(choice) {
+    if (!current || stage !== "choices" || busy) return;
+    setBusy(true);
+    setSelectedChoice(choice);
     try {
-      const res = await api.answerQuiz({
-        scenario_id: current.id,
-        selected,
-      });
-      setFeedback(res);
-      setAnswered((n) => n + 1);
-      if (res.correct) setScore((s) => s + 1);
+      const answerIndex = Number(choice.slice(1));
+      const res = await api.answerQuizV2({ question_id: current.id, answer: answerIndex });
+      setResponse(res);
+      setStage("result");
     } catch (e) {
       setError(e.message);
     } finally {
-      setSubmitting(false);
+      setBusy(false);
     }
   }
 
-  function next() {
-    if (index + 1 >= scenarios.length) {
-      setDone(true);
-      setFeedback(null);
+  function showChoices() {
+    if (!current) return;
+    setStage("choices");
+  }
+
+  function goPrevious() {
+    if (stage !== "choices") return;
+    setStage("ready");
+  }
+
+  function goNext() {
+    if (index + 1 >= questions.length) {
+      setStage("complete");
       return;
     }
     setIndex((i) => i + 1);
-    setFeedback(null);
-    if (typeof window !== "undefined") {
-      window.requestAnimationFrame(scrollQuizIntoView);
-    }
+    resetCurrent();
   }
 
   function restart() {
     setIndex(0);
-    setFeedback(null);
-    setScore(0);
-    setAnswered(0);
-    setSubmitting(false);
-    setDone(false);
-    if (typeof window !== "undefined") {
-      window.requestAnimationFrame(scrollQuizIntoView);
-    }
+    setStage("ready");
+    setSelectedChoice(null);
+    setResponse(null);
+    setError("");
   }
 
   if (loading) {
@@ -141,62 +107,81 @@ export default function Quiz() {
     );
   }
 
-  if (!scenarios.length) {
+  if (!questions.length) {
     return (
       <div className="page">
         <div className="empty-state">
-          <p className="muted">No scenarios yet.</p>
+          <p className="muted">No quiz questions are available yet.</p>
         </div>
       </div>
     );
   }
 
-  if (done) {
+  if (stage === "complete") {
     return (
-      <div className="page narrow choice-quiz-complete">
-        <span className="pill">Quiz complete</span>
-        <h1>Nice work reflecting.</h1>
-        <p className="lead">
-          You found <strong>{score}</strong> of {scenarios.length} best-choice matches.
-        </p>
-        <div className="choice-complete-score" aria-label={`${score} out of ${scenarios.length}`}>
-          <strong>{score}</strong>
-          <span>/ {scenarios.length}</span>
-        </div>
-        <p>
-          Real life is nuanced. The goal isn&apos;t perfection—it&apos;s practicing pause,
-          empathy, and action toward true inclusion.
-        </p>
-        <div className="btn-row">
-          <button type="button" className="btn btn-primary" onClick={restart}>
-            <RotateCcw size={17} aria-hidden="true" />
-            Retake quiz
-          </button>
-          <Link className="btn btn-ghost" to="/pledge">
-            Make a pledge
-            <ArrowRight size={16} aria-hidden="true" />
-          </Link>
+      <div className="page narrow">
+        <div
+          className="panel hover-lift quiz-finish"
+          style={{ maxWidth: "760px", margin: "0 auto", padding: "1.1rem 1.25rem" }}
+        >
+          <div className="quiz-finish-layout" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div
+              className="page-hero-band"
+              style={{
+                padding: 0,
+                background: "transparent",
+                boxShadow: "none",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <header
+                className="page-header"
+                style={{
+                  gap: "0.35rem",
+                  alignItems: "center",
+                  textAlign: "center",
+                  width: "fit-content",
+                  margin: "0 auto",
+                }}
+              >
+                <span className="pill" style={{ alignSelf: "center" }}>
+                  Light novel quiz
+                </span>
+                <h1 style={{ fontSize: "1.7rem", margin: 0, textAlign: "center" }}>
+                  Thank you for playing
+                </h1>
+                <p className="lead" style={{ fontSize: "0.98rem", margin: 0, textAlign: "center" }}>
+                  You journeyed through each scene and shared your voice.
+                </p>
+              </header>
+            </div>
+          </div>
+          <div className="quiz-finish-copy" style={{ marginTop: "0.9rem" }}>
+            <p style={{ margin: "0 0 0.9rem" }}>
+              Every choice matters. Keep reflecting and choosing ways that make campus safer
+              and more welcoming for everyone.
+            </p>
+            <div className="btn-row" style={{ justifyContent: "center" }}>
+              <button className="btn btn-primary" type="button" onClick={restart}>
+                Play again
+              </button>
+              <Link className="btn btn-ghost" to="/">
+                Back to home
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
-
-  const options = {
-    a: current.option_a,
-    b: current.option_b,
-    c: current.option_c,
-    d: current.option_d,
-  };
 
   return (
-    <div className="page choice-quiz-page">
-      <div className="choice-quiz-shell">
-        <header className="choice-quiz-header">
-          <div>
-            <span className="section-label">Feature 4 · Practice Belonging</span>
-            <h1>Choice Table</h1>
-          </div>
-          <div className="choice-quiz-progress">
+    <div className="page quiz-page">
+      <div className="quiz-layout">
+        <section className="panel quiz-card novel-panel">
+          <div className="quiz-progress">
             <div
               className="progress-track"
               role="progressbar"
@@ -205,92 +190,135 @@ export default function Quiz() {
               aria-valuemax={100}
               aria-label="Quiz progress"
             >
-              <div
-                className="progress-fill"
-                style={{ width: `${Math.max(progress, 8)}%` }}
-              />
+              <div className="progress-fill" style={{ width: `${Math.max(progress, 8)}%` }} />
             </div>
-            <span>{index + 1} / {scenarios.length}</span>
-          </div>
-        </header>
-
-        <section className="choice-table" key={current.id} aria-labelledby="scenario-heading">
-          <div className="choice-table-story">
-            <p className="choice-scenario-label">Scenario {index + 1}</p>
-            <h2 id="scenario-heading">{current.situation}</h2>
-            <figure className="choice-scene">
-              <img
-                src={currentArt.src}
-                alt={currentArt.alt}
-                width="1200"
-                height="800"
-                decoding="async"
-              />
-              <figcaption>Pause. Notice. Choose with care.</figcaption>
-            </figure>
+            <span className="progress-label">
+              Scene {index + 1} / {questions.length}
+            </span>
           </div>
 
-          <div className="choice-table-actions">
-            <p className="choice-instruction">What would you do?</p>
-            <div className="choice-option-list" role="group" aria-label="Answer choices">
-              {KEYS.map((key, optionIndex) => {
-                const selected = feedback?.selected === key;
-                const correct = feedback?.correct_option === key;
-                const wrong = selected && feedback && !feedback.correct;
-                const classes = [
-                  "choice-option",
-                  `choice-option-${OPTION_TONES[key]}`,
-                  selected ? "is-selected" : "",
-                  correct && feedback ? "is-correct" : "",
-                  wrong ? "is-wrong" : "",
-                ].filter(Boolean).join(" ");
+          <div className="novel-image">
+            <img src={stage === "result" ? responseImage : questionImage} alt="Scene illustration" className="page-art" />
+            {(stage === "ready" || stage === "choices" || stage === "result") && (
+              <div className="image-overlay">
+                <div className="overlay-gradient" />
+                <div className="overlay-content">
+                  {stage === "ready" && (
+                    <>
+                      <p className="scene-label">Scene {index + 1}</p>
+                      <p className="question-text">{current.question}</p>
+                    </>
+                  )}
+                  {stage === "choices" && (
+                    <div className="option-list choice-board overlay-choices" role="group" aria-label="Answer choices">
+                      {CHOICES.map((key) => {
+                        const label = current.choices[key];
+                        return (
+                          <div
+                            key={key}
+                            role="button"
+                            tabIndex={0}
+                            className="overlay-choice-text"
+                            onClick={() => loadChoice(key)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                loadChoice(key);
+                              }
+                            }}
+                          >
+                            <span className="opt-key">{key.toUpperCase()}</span>
+                            {label}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                {stage === "result" && (
+                  <>
+                    <button
+                      className="btn see-metrics-btn see-metrics-overlay"
+                      type="button"
+                      onClick={() => document.getElementById("response-panel")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+                    >
+                      AI evaluation
+                    </button>
+                    <button
+                      className="btn btn-primary overlay-next-btn"
+                      type="button"
+                      onClick={goNext}
+                    >
+                      {index + 1 >= questions.length ? "Finish" : "Next scene"}
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    className={classes}
-                    disabled={!!feedback || submitting}
-                    aria-pressed={selected}
-                    onClick={() => choose(key)}
-                    style={{ "--choice-order": optionIndex }}
-                  >
-                    <span className="choice-key" aria-hidden="true">{key.toUpperCase()}</span>
-                    <span className="choice-copy">{options[key]}</span>
-                    <span className="choice-radio" aria-hidden="true">
-                      {correct && feedback ? <CheckCircle2 size={21} /> : null}
-                    </span>
+          <div className="novel-body">
+            {(stage === "ready" || stage === "choices") && (
+              <>
+                {stage === "choices" && (
+                  <div className="option-list choice-board mobile-choice-list" role="group" aria-label="Answer choices">
+                    {CHOICES.map((key) => {
+                      const label = current.choices[key];
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          className="option-btn novel"
+                          onClick={() => loadChoice(key)}
+                          disabled={busy}
+                        >
+                          <span className="opt-key">{key.toUpperCase()}</span>
+                          <span>{label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+                <div className="stage-controls">
+                  <button className="btn btn-ghost" type="button" onClick={goPrevious} disabled={stage === "ready"}>
+                    {stage === "choices" ? "Read question again" : "Previous"}
                   </button>
-                );
-              })}
-            </div>
+                  {stage === "ready" && (
+                    <button className="btn btn-primary" type="button" onClick={showChoices}>
+                      Next
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+            {stage === "result" && response && (
+              <div className="response-panel" id="response-panel">
+                <div className="response-panel-header">
+                  <span className="ai-pill">AI Powered Response System</span>
+                </div>
+                <h2>The response</h2>
+                <p>{response.opinion}</p>
+                <div className="metrics-grid">
+                  <div className="metric-pill selected">
+                    <strong>{samePercent}%</strong>
+                    <span>of people chose the same as you</span>
+                  </div>
+                  <div className="metric-pill total">
+                    <strong>{totalResponses}</strong>
+                    <span>total responses recorded</span>
+                  </div>
+                </div>
+                <div className="answer-breakdown">
+                  {CHOICES.map((key) => (
+                    <div key={key} className={`answer-row ${selectedChoice === key ? "selected-row" : ""}`}>
+                      <span>{current.choices[key]}</span>
+                      <strong>{responseData[key]} people</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
-
-        {feedback ? (
-          <div className={`choice-feedback ${feedback.correct ? "is-positive" : "is-reflective"}`} role="status">
-            <div className="choice-feedback-icon" aria-hidden="true">
-              {feedback.correct ? <CheckCircle2 size={26} /> : <HeartHandshake size={26} />}
-            </div>
-            <div className="choice-feedback-copy">
-              <strong>{feedback.correct ? "Solid choice." : "Let’s unpack this."}</strong>
-              <p>{feedback.explanation}</p>
-            </div>
-            <button type="button" className="btn btn-primary" onClick={next}>
-              {index + 1 >= scenarios.length ? "See results" : "Next scenario"}
-              <ArrowRight size={17} aria-hidden="true" />
-            </button>
-          </div>
-        ) : (
-          <div className="choice-guidance">
-            <HeartHandshake size={24} aria-hidden="true" />
-            <div>
-              <strong>There&apos;s no perfect answer.</strong>
-              <p>Choose the response that shows respect, care, and courage.</p>
-            </div>
-            <span className="choice-quiz-score">Answered {answered} · Best matches {score}</span>
-          </div>
-        )}
       </div>
     </div>
   );

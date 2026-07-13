@@ -86,6 +86,9 @@ export const api = {
   getQuiz: () => request("/api/quiz/scenarios"),
   answerQuiz: (body) =>
     request("/api/quiz/answer", { method: "POST", body: JSON.stringify(body) }),
+  getQuizV2: () => request("/api/quizv2/questionset/"),
+  answerQuizV2: (body) =>
+    request("/api/quizv2/answer/", { method: "POST", body: JSON.stringify(body) }),
   adminLogin: (password) =>
     request("/api/admin/login", {
       method: "POST",
