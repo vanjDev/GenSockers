@@ -5,6 +5,7 @@ import {
   LogOut,
   Menu,
   Settings,
+  Sparkles,
   UserRound,
   X,
 } from "lucide-react";
@@ -21,9 +22,9 @@ const primary = [
   { to: "/learn", label: "Learn" },
   { to: "/hinto", label: "HINTO" },
   { to: "/kapwa", label: "Stories" },
-  { to: "/quiz", label: "Quiz" },
   { to: "/legal", label: "Rights" },
   { to: "/resources", label: "Support" },
+  { to: "/quiz", label: "AI powered quiz", className: "nav-quiz-link", icon: Sparkles },
 ];
 
 export default function Navbar() {
@@ -118,9 +119,14 @@ export default function Navbar() {
             <NavLink
               key={link.to}
               to={link.to}
-              className={({ isActive }) => (isActive ? "active" : undefined)}
+              className={({ isActive }) => [isActive ? "active" : undefined, link.className].filter(Boolean).join(" ")}
             >
-              {link.label}
+              {link.icon && (
+                <span className="nav-link-icon" aria-hidden="true">
+                  <link.icon size={15} strokeWidth={2.2} />
+                </span>
+              )}
+              <span>{link.label}</span>
             </NavLink>
           ))}
           {session?.participant ? (

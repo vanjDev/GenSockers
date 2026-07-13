@@ -118,30 +118,57 @@ export default function Quiz() {
   if (stage === "complete") {
     return (
       <div className="page narrow">
-        <div className="page-hero-band">
-          <header className="page-header">
-            <span className="pill">Light novel quiz</span>
-            <h1>Thank you for playing</h1>
-            <p className="lead">You journeyed through each scene and shared your voice.</p>
-          </header>
-        </div>
-        <div className="panel hover-lift quiz-finish">
-          <img
-            src="/art/quiz-classroom.jpg"
-            alt="Quiz classroom finale"
-            className="page-art finish-art"
-          />
-          <p>
-            Every choice matters. Keep reflecting and choosing ways that make campus safer
-            and more welcoming for everyone.
-          </p>
-          <div className="btn-row" style={{ justifyContent: "center" }}>
-            <button className="btn btn-primary" type="button" onClick={restart}>
-              Play again
-            </button>
-            <Link className="btn btn-ghost" to="/">
-              Back to home
-            </Link>
+        <div
+          className="panel hover-lift quiz-finish"
+          style={{ maxWidth: "760px", margin: "0 auto", padding: "1.1rem 1.25rem" }}
+        >
+          <div className="quiz-finish-layout" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div
+              className="page-hero-band"
+              style={{
+                padding: 0,
+                background: "transparent",
+                boxShadow: "none",
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <header
+                className="page-header"
+                style={{
+                  gap: "0.35rem",
+                  alignItems: "center",
+                  textAlign: "center",
+                  width: "fit-content",
+                  margin: "0 auto",
+                }}
+              >
+                <span className="pill" style={{ alignSelf: "center" }}>
+                  Light novel quiz
+                </span>
+                <h1 style={{ fontSize: "1.7rem", margin: 0, textAlign: "center" }}>
+                  Thank you for playing
+                </h1>
+                <p className="lead" style={{ fontSize: "0.98rem", margin: 0, textAlign: "center" }}>
+                  You journeyed through each scene and shared your voice.
+                </p>
+              </header>
+            </div>
+          </div>
+          <div className="quiz-finish-copy" style={{ marginTop: "0.9rem" }}>
+            <p style={{ margin: "0 0 0.9rem" }}>
+              Every choice matters. Keep reflecting and choosing ways that make campus safer
+              and more welcoming for everyone.
+            </p>
+            <div className="btn-row" style={{ justifyContent: "center" }}>
+              <button className="btn btn-primary" type="button" onClick={restart}>
+                Play again
+              </button>
+              <Link className="btn btn-ghost" to="/">
+                Back to home
+              </Link>
+            </div>
           </div>
         </div>
       </div>

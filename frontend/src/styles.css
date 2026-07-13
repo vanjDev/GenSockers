@@ -274,6 +274,33 @@ button,
   font-weight: 650;
 }
 
+.nav-links a.nav-quiz-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, rgba(255, 248, 219, 0.95), rgba(255, 214, 102, 0.95));
+  color: var(--forest) !important;
+  font-weight: 700;
+  border: 1px solid rgba(196, 154, 26, 0.28);
+  box-shadow: 0 10px 22px rgba(196, 154, 26, 0.16);
+}
+
+.nav-links a.nav-quiz-link:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.nav-links a.nav-quiz-link.active {
+  background: linear-gradient(135deg, rgba(255, 248, 219, 0.98), rgba(255, 214, 102, 0.96));
+  box-shadow: 0 10px 22px rgba(196, 154, 26, 0.18);
+}
+
+.nav-links a.nav-quiz-link .nav-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .nav-links a.nav-cta {
   background: linear-gradient(135deg, var(--gold-bright), var(--gold));
   color: var(--forest) !important;
