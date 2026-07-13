@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="tulay-mark-title tulay-mark-description">
+  <title id="tulay-mark-title">Project TULAY</title>
+  <desc id="tulay-mark-description">A person sheltered beneath two bridge arches, representing connection and belonging.</desc>
+  <defs>
+    <linearGradient id="tulay-gold" x1="52" y1="40" x2="188" y2="202" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EAD48A"/>
+      <stop offset="0.55" stop-color="#D9B33A"/>
+      <stop offset="1" stop-color="#C49A1A"/>
+    </linearGradient>
+    <filter id="tulay-shadow" x="20" y="22" width="200" height="204" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#0B3429" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <circle cx="120" cy="120" r="94" fill="url(#tulay-gold)" filter="url(#tulay-shadow)"/>
+  <circle cx="120" cy="120" r="93.25" fill="none" stroke="#FFFDF9" stroke-opacity="0.36" stroke-width="1.5"/>
+
+  <g fill="none" stroke="#0B3429" stroke-linecap="round">
+    <path d="M67 146C79 105 97 84 120 84C143 84 161 105 173 146" stroke-width="11"/>
+    <path d="M89 146C98 119 108 107 120 107C132 107 142 119 151 146" stroke-width="6" stroke-opacity="0.58"/>
+  </g>
+  <circle cx="120" cy="140" r="8" fill="#0B3429"/>
+</svg>

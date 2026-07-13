@@ -5,7 +5,7 @@ export default function TulayLogo({ variant = "full", theme = "light" }) {
     <span className={`tulay-logo tulay-logo-${theme}${compact ? " tulay-logo-compact" : ""}`}>
       <img
         className="tulay-logo-mark"
-        src="/brand/tulay-mark.png"
+        src="/brand/tulay-mark.svg"
         alt={compact ? "Project TULAY" : ""}
         aria-hidden={compact ? undefined : true}
       />
