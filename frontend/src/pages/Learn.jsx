@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ArrowDown, ArrowRight } from "lucide-react";
 
 const examples = [
   {
@@ -61,14 +62,19 @@ export default function Learn() {
       <section className="panel hover-lift" style={{ marginTop: "1.1rem" }}>
         <h2 className="panel-title">Common campus examples</h2>
         <div className="compare-list">
-          {examples.map((ex) => (
+          {examples.map((ex, index) => (
             <div key={ex.bad} className="compare-card">
-              <div>
+              <div className="compare-option compare-option-bad">
+                <span className="compare-number">{String(index + 1).padStart(2, "0")}</span>
                 <span className="label-bad">Instead of</span>
                 <p>{ex.bad}</p>
               </div>
-              <div>
-                <span className="label-good">Try</span>
+              <div className="compare-arrow" aria-hidden="true">
+                <ArrowRight className="compare-arrow-wide" size={18} strokeWidth={2.4} />
+                <ArrowDown className="compare-arrow-narrow" size={18} strokeWidth={2.4} />
+              </div>
+              <div className="compare-option compare-option-good">
+                <span className="label-good">Try this</span>
                 <p>{ex.better}</p>
               </div>
             </div>
