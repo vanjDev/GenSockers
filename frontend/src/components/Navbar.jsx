@@ -24,7 +24,7 @@ const primary = [
   { to: "/kapwa", label: "Stories" },
   { to: "/legal", label: "Rights" },
   { to: "/resources", label: "Support" },
-  { to: "/quiz", label: "AI powered quiz", className: "nav-quiz-link", icon: Sparkles },
+  { to: "/quiz", label: "Smart Quiz", className: "nav-quiz-link", icon: Sparkles },
 ];
 
 export default function Navbar() {

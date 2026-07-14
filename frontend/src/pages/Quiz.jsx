@@ -241,7 +241,7 @@ export default function Quiz() {
                       type="button"
                       onClick={() => document.getElementById("response-panel")?.scrollIntoView({ behavior: "smooth", block: "center" })}
                     >
-                      AI evaluation
+                      evaluations
                     </button>
                     <button
                       className="btn btn-primary overlay-next-btn"
@@ -293,7 +293,7 @@ export default function Quiz() {
             {stage === "result" && response && (
               <div className="response-panel" id="response-panel">
                 <div className="response-panel-header">
-                  <span className="ai-pill">AI Powered Response System</span>
+                  <span className="ai-pill">Automated Response System v6.7</span>
                 </div>
                 <h2>The response</h2>
                 <p>{response.opinion}</p>
