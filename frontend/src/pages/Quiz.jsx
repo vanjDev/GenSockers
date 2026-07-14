@@ -241,7 +241,7 @@ export default function Quiz() {
                       type="button"
                       onClick={() => document.getElementById("response-panel")?.scrollIntoView({ behavior: "smooth", block: "center" })}
                     >
-                      evaluations
+                      Evaluations
                     </button>
                     <button
                       className="btn btn-primary overlay-next-btn"
